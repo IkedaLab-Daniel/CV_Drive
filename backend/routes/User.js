@@ -1,6 +1,7 @@
 const express = require('express')
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 // controller functions
 const {
@@ -11,6 +12,8 @@ const {
 } = require('../controllers/userController')
 
 const router = express.Router()
+const uploadDirectory = path.resolve(__dirname, '../public/images');
+fs.mkdirSync(uploadDirectory, { recursive: true });
 
 // login route
 router.post('/login', loginUser)
@@ -24,7 +27,7 @@ router.patch('/:id', updateUser)
 // Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.resolve(__dirname, '../public/images'));
+    cb(null, uploadDirectory);
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname));

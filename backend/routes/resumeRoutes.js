@@ -7,9 +7,11 @@ const { uploadResume, getResumes, deleteResume } = require('../controllers/resum
 const requireAuth = require('../middleware/requireAuth')
 
 // Multer setup
+const uploadDirectory = path.resolve(__dirname, '../public/images');
+fs.mkdirSync(uploadDirectory, { recursive: true });
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.resolve(__dirname, '../public/images')); 
+    cb(null, uploadDirectory);
   },
   filename: (req, file, cb) => {
     const uploadPath = path.resolve(__dirname, '../public/images', file.originalname);
